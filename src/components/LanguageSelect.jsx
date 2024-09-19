@@ -3,7 +3,7 @@ import {TbTransfer} from "react-icons/tb";
 import {useSelector} from "react-redux";
 import ReactSelect from "react-select";
 
-const LanguageSelect = ({setSourceLang, setTargetLang, sourceLang, targetLang}) => {
+const LanguageSelect = ({handleSwap, setSourceLang, setTargetLang, sourceLang, targetLang}) => {
 
     const {isLoading, error, langs} = useSelector((store) => store.lang)
 
@@ -26,6 +26,7 @@ const LanguageSelect = ({setSourceLang, setTargetLang, sourceLang, targetLang}) 
                 options={formated}/>
 
             <button
+                onClick={handleSwap}
                 className=' flex gap-1 items-center bg-zinc-700 py-1 px-4 hover:bg-zinc-600 transition rounded text-white'>
                 <TbTransfer className='text-3xl text-amber-600 font-bold'/>
             </button>

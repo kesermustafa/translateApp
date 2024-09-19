@@ -2,7 +2,7 @@ import {createSlice} from "@reduxjs/toolkit";
 import {translateText} from "../actions/index.js";
 
 const initialState = {
-    isLoading: true,
+    isLoading: false,
     error: null,
     answer:"",
 }
@@ -14,6 +14,7 @@ const translateSlice = createSlice({
     extraReducers:(builder) => {
         builder.addCase(translateText.pending, (state, action) => {
             state.isLoading = true;
+            state.answer = ""
         })
 
         builder.addCase(translateText.rejected, (state, {error}) => {

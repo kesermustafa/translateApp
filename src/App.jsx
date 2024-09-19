@@ -1,23 +1,22 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import LanguageSelect from "./components/LanguageSelect.jsx";
 import TextTranslate from "./components/TextTranslate.jsx";
 import {PiTranslate} from "react-icons/pi";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getLangs, translateText} from "./redux/actions/index.js";
+import {en, tr} from "./constants.js";
 
 const App = () => {
 
+    const state = useSelector((store) => store.translate)
+
     const dispatch = useDispatch()
 
-    const [sourceLang, setSourceLang] = useState({
-        "label": "Turkish",
-        "value": "tr"
-    });
-    const [targetLang, setTargetLang] = useState({
-        "label": "English",
-        "value": "en"
-    });
-    const [text, setText] = useState();
+    const [sourceLang, setSourceLang] = useState(tr);
+
+    const [targetLang, setTargetLang] = useState(en);
+
+    const [text, setText] = useState("");
 
     useEffect(() => {
         dispatch(getLangs())
@@ -25,6 +24,18 @@ const App = () => {
 
     const handleTranslate = ()=>{
         dispatch(translateText({sourceLang, targetLang, text}))
+    }
+
+    useEffect(() => {
+        if(!text) return
+        dispatch(translateText({sourceLang, targetLang, text}))
+    }, [targetLang]);
+
+
+    const handleSwap = ()=>{
+        setSourceLang(targetLang)
+        setTargetLang(sourceLang)
+        setText(state.answer)
     }
 
     return (
@@ -40,7 +51,9 @@ const App = () => {
                     sourceLang={sourceLang}
                     targetLang={targetLang}
                     setSourceLang={setSourceLang}
-                    setTargetLang={setTargetLang} />
+                    setTargetLang={setTargetLang}
+                    handleSwap = {handleSwap}
+                />
 
                 {/* Text Alanlari */}
                 <TextTranslate setText={setText} text={text} />
